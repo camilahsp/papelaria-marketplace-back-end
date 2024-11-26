@@ -102,7 +102,56 @@ app.post("/usuarios", async (req, res) => {
     }
 });
 
+// Endpoint para listar produtos
+app.get("/produtos", async (req, res) => {
+    try {
+      const connection = await mysql.createConnection({
+        host: process.env.dbhost ? process.env.dbhost : "localhost",
+        user: process.env.dbuser ? process.env.dbuser : "root",
+        password: process.env.dbpassword ? process.env.dbpassword : "",
+        database: process.env.dbname ? process.env.dbname : "banco1022a",
+        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+      });
+  
+      // Alterar a tabela para 'produtos' ou mantenha 'livros'
+      const [result] = await connection.query("SELECT * FROM produtos");
+      await connection.end();
+      res.send(result);
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Erro ao listar produtos");
+    }
+  });
+  
+  // Endpoint para cadastrar produtos
+  app.post("/produtos", async (req, res) => {
+    try {
+      const connection = await mysql.createConnection({
+        host: process.env.dbhost ? process.env.dbhost : "localhost",
+        user: process.env.dbuser ? process.env.dbuser : "root",
+        password: process.env.dbpassword ? process.env.dbpassword : "",
+        database: process.env.dbname ? process.env.dbname : "banco1022a",
+        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+      });
+  
+      const { titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco } = req.body;
+  
+      // Altere o nome da tabela para 'produtos', ou mantenha como 'livros'
+      const [result] = await connection.query("INSERT INTO produtos (titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+        [titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco]);
+  
+      await connection.end();
+      res.status(201).send(result);
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Erro ao cadastrar produto");
+    }
+  });
+  
+
 
 app.listen(8000, () => {
     console.log("Iniciei o servidor")
 })
+
+
