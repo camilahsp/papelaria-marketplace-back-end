@@ -35,10 +35,10 @@ app.post("/livros", async (req, res) => {
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
-        const {id,titulo,autor,descricao,genero,dataLancamento,editora, numerodePaginas,preco, imagemLivro} = req.body
+        const {id,titulo,autor,genero,dataLancamento,preco, imagemLivro} = req.body
         const [result, fields] =
-                    await connection.query("INSERT INTO livros VALUES (?,?,?,?,?,?,?,?,?,?)",
-                            [id,titulo,autor,descricao,genero,dataLancamento,editora, numerodePaginas,preco, imagemLivro])
+                    await connection.query("INSERT INTO livros VALUES (?,?,?,?,?,?,?)",
+                            [id,titulo,autor,genero,dataLancamento,preco, imagemLivro])
         await connection.end()
         res.send(result)
     } catch (e) {
@@ -134,11 +134,11 @@ app.get("/produtos", async (req, res) => {
         port: process.env.dbport ? parseInt(process.env.dbport) : 3306
       });
   
-      const { titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco } = req.body;
+      const { titulo, autor, imagem, descricao, genero, preco } = req.body;
   
       // Altere o nome da tabela para 'produtos', ou mantenha como 'livros'
-      const [result] = await connection.query("INSERT INTO produtos (titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-        [titulo, autor, numeroDePaginas, editora, imagem, descricao, genero, preco]);
+      const [result] = await connection.query("INSERT INTO produtos (titulo, autor, imagem, genero, preco) VALUES (?, ?, ?, ?, ?)", 
+        [titulo, autor, imagem, descricao, genero, preco]);
   
       await connection.end();
       res.status(201).send(result);
