@@ -35,10 +35,10 @@ app.post("/livros", async (req, res) => {
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 18569
         })
-        const {id,titulo,autor,genero,preco, imagemLivro} = req.body
+        const {id,titulo,autor, imagemLivro,genero,preco} = req.body
         const [result, fields] =
                     await connection.query("INSERT INTO livros VALUES (?,?,?,?,?,?)",
-                            [id,titulo,autor,genero,preco, imagemLivro])
+                            [id,titulo,autor,imagemLivro,genero,preco ])
         await connection.end()
         res.send(result)
     } catch (e) {
@@ -124,7 +124,7 @@ app.get("/produtos", async (req, res) => {
   });
   
   // Endpoint para cadastrar produtos
- app.post("/produtos", async (req, res) => {
+  app.post("/produtos", async (req, res) => {
     try {
       const connection = await mysql.createConnection({
         host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
@@ -134,11 +134,11 @@ app.get("/produtos", async (req, res) => {
         port: process.env.dbport ? parseInt(process.env.dbport) : 18569
       });
   
-      const { titulo, autor, imagem, descricao, genero, preco } = req.body;
+      const { titulo, autor, imagem, genero, preco } = req.body;
   
       // Altere o nome da tabela para 'produtos', ou mantenha como 'livros'
       const [result] = await connection.query("INSERT INTO produtos (titulo, autor, imagem, genero, preco) VALUES (?, ?, ?, ?, ?)", 
-        [titulo, autor, imagem, descricao, genero, preco]);
+        [titulo, autor, imagem, genero, preco]);
   
       await connection.end();
       res.status(201).send(result);
@@ -148,12 +148,10 @@ app.get("/produtos", async (req, res) => {
     }
   });
   
- 
 
 
 app.listen(8000, () => {
     console.log("Iniciei o servidor")
 })
-
 
 
