@@ -12,7 +12,7 @@ app.get("/livros", async (req, res) => {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
             user: process.env.dbuser ? process.env.dbuser : "avnadmin",
-            password: process.env.dbpassword ? process.env.dbpassword : "AVNS_ZF55z2VYB_QZLp737Oh",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 18569
         })
@@ -28,7 +28,7 @@ app.post("/livros", async (req, res) => {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
             user: process.env.dbuser ? process.env.dbuser : "avnadmin",
-            password: process.env.dbpassword ? process.env.dbpassword : "AVNS_ZF55z2VYB_QZLp737Oh",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 18569
         })
@@ -51,7 +51,7 @@ app.get("/usuarios", async (req, res) => {
         const connection = await mysql.createConnection({
             host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
             user: process.env.dbuser ? process.env.dbuser : "avnadmin",
-            password: process.env.dbpassword ? process.env.dbpassword : "AVNS_ZF55z2VYB_QZLp737Oh",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
             database: process.env.dbname ? process.env.dbname : "banco1022a",
             port: process.env.dbport ? parseInt(process.env.dbport) : 18569
         })
