@@ -10,11 +10,11 @@ app.use(cors())
 app.get("/livros", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-            user: process.env.dbuser ? process.env.dbuser : "avnadmin",
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
             password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "defaultdb",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const [result, fields] = await connection.query("SELECT * from livros")
         await connection.end()
@@ -26,11 +26,11 @@ app.get("/livros", async (req, res) => {
 app.post("/livros", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-            user: process.env.dbuser ? process.env.dbuser : "avnadmin",
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
             password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "defaultdb",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const {id,titulo,autor, imagemLivro,genero,preco} = req.body
         const [result, fields] =
@@ -49,11 +49,11 @@ app.post("/livros", async (req, res) => {
 app.get("/usuarios", async (req, res) => {
     try {
         const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-            user: process.env.dbuser ? process.env.dbuser : "avnadmin",
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
             password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "defaultdb",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         })
         const [result, fields] = await connection.query("SELECT * from usuarios")
         await connection.end()
@@ -69,11 +69,11 @@ app.post("/usuarios", async (req, res) => {
     try {
         // Conexão com o banco de dados MySQL
         const connection = await mysql.createConnection({
-            host: process.env.dbhost || "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-            user: process.env.dbuser || "avnadmin",
-            password: process.env.dbpassword || "",
-            database: process.env.dbname || "defaultdb",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+            host: process.env.dbhost ? process.env.dbhost : "localhost",
+            user: process.env.dbuser ? process.env.dbuser : "root",
+            password: process.env.dbpassword ? process.env.dbpassword : "",
+            database: process.env.dbname ? process.env.dbname : "banco1022a",
+            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
         });
 
 
@@ -102,11 +102,11 @@ app.post("/usuarios", async (req, res) => {
 app.get("/produtos", async (req, res) => {
     try {
       const connection = await mysql.createConnection({
-        host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-            user: process.env.dbuser ? process.env.dbuser : "avnadmin",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "defaultdb",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+        host: process.env.dbhost ? process.env.dbhost : "localhost",
+        user: process.env.dbuser ? process.env.dbuser : "root",
+        password: process.env.dbpassword ? process.env.dbpassword : "",
+        database: process.env.dbname ? process.env.dbname : "banco1022a",
+        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
       });
   
       // Alterar a tabela para 'produtos' ou mantenha 'livros'
@@ -123,11 +123,11 @@ app.get("/produtos", async (req, res) => {
   app.post("/produtos", async (req, res) => {
     try {
       const connection = await mysql.createConnection({
-        host: process.env.dbhost ? process.env.dbhost : "mysql-marketplace1022a-estudante-c2ac.f.aivencloud.com",
-        user: process.env.dbuser ? process.env.dbuser : "avnadmin",
+        host: process.env.dbhost ? process.env.dbhost : "localhost",
+        user: process.env.dbuser ? process.env.dbuser : "root",
         password: process.env.dbpassword ? process.env.dbpassword : "",
-        database: process.env.dbname ? process.env.dbname : "defaultdb",
-        port: process.env.dbport ? parseInt(process.env.dbport) : 18569
+        database: process.env.dbname ? process.env.dbname : "banco1022a",
+        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
       });
   
       const { titulo, autor, imagem, genero, preco } = req.body;
