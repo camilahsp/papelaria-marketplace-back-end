@@ -49,4 +49,4 @@ class BancoMysql{
     }
 }
 
-export default BancoMysql
+export default BancoMysql;
