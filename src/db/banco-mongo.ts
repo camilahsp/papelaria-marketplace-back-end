@@ -16,7 +16,7 @@ class BancoMongo{
         const result = db.collection('produtos').find().toArray()
         return result
     }
-    async inserir(produto:{id:number,nome:string,descricao:string,preco:string,imagem:string}){
+    async inserir(produto:{id:number,titulo:string,descricao:string,preco:string,genero:string, autor:string,imagem:string}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
         const db = this.connection.db("banco1022a");
         const result = db.collection('produtos').insertOne(produto)
@@ -29,7 +29,7 @@ class BancoMongo{
         const result = db.collection('produtos').deleteOne({id:idNumber})
         return result
     }
-    async alterar(id:string,produto:{id?:string,nome:string,descricao:string,preco:string,imagem:string}){
+    async alterar(id:string,produto:{id?:string,titulo:string,descricao:string,preco:string, genero:string, autor:string,imagem:string}){
         const idNumber = parseInt(id)
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
         const db = this.connection.db("banco1022a");
