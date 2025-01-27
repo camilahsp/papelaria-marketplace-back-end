@@ -1,154 +1,119 @@
 import express from 'express'
 import mysql from 'mysql2/promise'
 import cors from 'cors'
-
+import BancoMysql from './db/banco-mysql'
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 
-app.get("/livros", async (req, res) => {
-    try {
-        const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "localhost",
-            user: process.env.dbuser ? process.env.dbuser : "root",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "banco1022a",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-        })
-        const [result, fields] = await connection.query("SELECT * from livros")
-        await connection.end()
-        res.send(result)
-    } catch (e) {
-        res.status(500).send("Server ERROR")
-    }
-})
-app.post("/livros", async (req, res) => {
-    try {
-        const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "localhost",
-            user: process.env.dbuser ? process.env.dbuser : "root",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "banco1022a",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-        })
-        const {id,titulo,autor, imagemLivro,genero,preco} = req.body
-        const [result, fields] =
-                    await connection.query("INSERT INTO livros VALUES (?,?,?,?,?,?)",
-                            [id,titulo,autor,imagemLivro,genero,preco ])
-        await connection.end()
-        res.send(result)
-    } catch (e) {
-        console.log(e)
-        res.status(500).send("Server ERROR")
-    }
-})
+class BancoMysql {
+  private connection: mysql.Connection;
 
+  async criarConexao() {
+    this.connection = await mysql.createConnection({
+      host: process.env.dbhost || "localhost",
+      user: process.env.dbuser || "root",
+      password: process.env.dbpassword || "",
+      database: process.env.dbname || "banco1022a",
+      port: process.env.dbport ? parseInt(process.env.dbport) : 3306
+    });
+  }
 
+  async finalizarConexao() {
+    await this.connection.end();
+  }
 
-app.get("/usuarios", async (req, res) => {
-    try {
-        const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "localhost",
-            user: process.env.dbuser ? process.env.dbuser : "root",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "banco1022a",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-        })
-        const [result, fields] = await connection.query("SELECT * from usuarios")
-        await connection.end()
-        res.send(result)
-    } catch (e) {
-        res.status(500).send(e)
-    }
-})
+  async listar() {
+    const [result] = await this.connection.query("SELECT * from produtos");
+    return result;
+  }
 
+  async listarPorId(id: number) {
+    const [result] = await this.connection.query("SELECT * from produtos WHERE id = ?", [id]);
+    return result;
+  }
 
-// Endpoint para cadastrar usuários
-app.post("/usuarios", async (req, res) => {
-    try {
-        // Conexão com o banco de dados MySQL
-        const connection = await mysql.createConnection({
-            host: process.env.dbhost ? process.env.dbhost : "localhost",
-            user: process.env.dbuser ? process.env.dbuser : "root",
-            password: process.env.dbpassword ? process.env.dbpassword : "",
-            database: process.env.dbname ? process.env.dbname : "banco1022a",
-            port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-        });
+  async inserir(produto: any) {
+    const [result] = await this.connection.query("INSERT INTO produtos SET ?", produto);
+    return result;
+  }
 
+  async excluir(id: number) {
+    const [result] = await this.connection.query("DELETE from produtos WHERE id = ?", [id]);
+    return result;
+  }
 
-        // Pegando os dados enviados no corpo da requisição (do frontend)
-        const { nome, email, enderecoEntrega } = req.body;
-       
-        // Inserindo no banco de dados
-        const [result] = await connection.query(
-            "INSERT INTO usuarios (nome, email, enderecoEntrega) VALUES (?, ?, ?)",
-            [nome, email, enderecoEntrega]
-        );
-       
-        // Fechando a conexão com o banco
-        await connection.end();
-       
-        // Respondendo sucesso
-        res.status(201).send(result); // Código 201: Criado com sucesso
-    } catch (e) {
-        // Caso haja algum erro
-        console.error(e);
-        res.status(500).send("Erro ao cadastrar usuário");
-    }
-});
+  async alterar(id: number, produto: any) {
+    const [result] = await this.connection.query("UPDATE produtos SET ? WHERE id = ?", [produto, id]);
+    return result;
+  }
+}
 
-// Endpoint para listar produtos
 app.get("/produtos", async (req, res) => {
-    try {
-      const connection = await mysql.createConnection({
-        host: process.env.dbhost ? process.env.dbhost : "localhost",
-        user: process.env.dbuser ? process.env.dbuser : "root",
-        password: process.env.dbpassword ? process.env.dbpassword : "",
-        database: process.env.dbname ? process.env.dbname : "banco1022a",
-        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-      });
-  
-      // Alterar a tabela para 'produtos' ou mantenha 'livros'
-      const [result] = await connection.query("SELECT * FROM produtos");
-      await connection.end();
-      res.send(result);
-    } catch (e) {
-      console.log(e);
-      res.status(500).send("Erro ao listar produtos");
-    }
-  });
-  
-  // Endpoint para cadastrar produtos
-  app.post("/produtos", async (req, res) => {
-    try {
-      const connection = await mysql.createConnection({
-        host: process.env.dbhost ? process.env.dbhost : "localhost",
-        user: process.env.dbuser ? process.env.dbuser : "root",
-        password: process.env.dbpassword ? process.env.dbpassword : "",
-        database: process.env.dbname ? process.env.dbname : "banco1022a",
-        port: process.env.dbport ? parseInt(process.env.dbport) : 3306
-      });
-  
-      const { titulo, autor, imagem, genero, preco } = req.body;
-  
-      // Altere o nome da tabela para 'produtos', ou mantenha como 'livros'
-      const [result] = await connection.query("INSERT INTO produtos (titulo, autor, imagem, genero, preco) VALUES (?, ?, ?, ?, ?)", 
-        [titulo, autor, imagem, genero, preco]);
-  
-      await connection.end();
-      res.status(201).send(result);
-    } catch (e) {
-      console.log(e);
-      res.status(500).send("Erro ao cadastrar produto");
-    }
-  });
-  
+  try {
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const result = await banco.listar()
+    await banco.finalizarConexao()
+    res.send(result)
+  } catch (e) {
+    console.log(e)
+    res.status(500).send("Server ERROR")
+  }
+})
 
+app.get("/produtos/:id", async (req, res) => {
+  try {
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const result = await banco.listarPorId(parseInt(req.params.id))
+    await banco.finalizarConexao()
+    res.send(result)
+  } catch (e) {
+    console.log(e)
+    res.status(500).send("Server ERROR")
+  }
+})
+
+app.post("/produtos", async (req, res) => {
+  try {
+    const { id, nome, descricao, preco, imagem } = req.body
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const produto = { id: parseInt(id), nome, descricao, preco, imagem }
+    const result = await banco.inserir(produto)
+    await banco.finalizarConexao()
+    res.send(result)
+  } catch (e) {
+    console.log(e)
+    res.status(500).send(e)
+  }
+})
+
+app.delete("/produtos/:id", async (req, res) => {
+  try {
+    const banco = new BancoMysql()
+    await banco.criarConexao()
+    const result = await banco.excluir(parseInt(req.params.id))
+    await banco.finalizarConexao()
+    res.status(200).send("Produto excluido com sucesso id: " + req.params.id)
+  } catch (e) {
+    console.log(e)
+    res.status(500).send("Erro ao excluir")
+  }
+})
+
+app.put("/produtos/:id", async (req, res) => {
+  const { nome, descricao, preco, imagem } = req.body
+  const produto = { nome, descricao, preco, imagem }
+  const banco = new BancoMysql()
+  await banco.criarConexao()
+  const result = await banco.alterar(parseInt(req.params.id), produto)
+  await banco.finalizarConexao()
+  res.status(200).send("Produto alterado com sucesso id: " + req.params.id)
+})
 
 app.listen(8000, () => {
-    console.log("Iniciei o servidor")
+  console.log("Iniciei o servidor")
 })
-
-
-
