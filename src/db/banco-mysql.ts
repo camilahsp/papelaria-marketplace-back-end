@@ -39,7 +39,7 @@ class BancoMysql{
     }
     async alterar(id:string,produto:{id?:number,titulo:string,descricao:string,preco:string,genero:string, autor:string, imagem:string}){
         if(!this.connection) throw new Error("Erro de conexão com o banco de dados.")
-        const [result, fields] = await this.connection.query("UPDATE produtos SET titulo=?,descricao=?,preco=?,genero=?,autor=?,imagem=? WHERE id=?",[produto.titulo,produto.descricao,produto.preco,produto.imagem,id, produto.genero,produto.autor])
+        const [result, fields] = await this.connection.query("UPDATE produtos SET titulo=?,descricao=?,preco=?,genero=?,autor=?,imagem=? WHERE id=?",[produto.titulo,produto.descricao,produto.preco,produto.genero, produto.autor,produto.imagem,id])
         return result
     }
     async listarPorId(id:string){
